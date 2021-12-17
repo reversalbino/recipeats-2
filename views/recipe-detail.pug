@@ -8,7 +8,13 @@ block content
             h2= recipe.id
             h1= recipe.title
             h2= recipe.author
-            div.averagerating avg rating here
+            div#rating-container
+                if avgratings > 0
+                    while avgratings--
+                        for avgrating in avgratings
+                            p.recipeRating One Star
+                else 
+                    p.no-ratings-yet Leave the first rating!
             if locals.authenticated
                 if errors
                     each error in errors
@@ -50,3 +56,20 @@ block content
                                 button(value=`${review.id}` class="editbtn")#editButton Edit
                             form.deleteform(action=`/recipes/reviews/${review.id}/delete`, method="post")
                                 button(value=`${review.id}` class="deletebtn")#deleteButton Delete
+        if locals.authenticated
+            div.addrating
+                input#star5.star(type='radio' name='rating' value='5' userId=locals.userId)
+                label(for='star5') 5 stars
+                input#star4.star(type='radio' name='rating' value='4' userId=locals.userId)
+                label(for='star4') 4 stars
+                input#star3.star(type='radio' name='rating' value='3' userId=locals.userId)
+                label(for='star3') 3 stars
+                input#star2.star(type='radio' name='rating' value='2' userId=locals.userId)
+                label(for='star2') 2 stars
+                input#star1.star(type='radio' name='rating' value='1' userId=locals.userId)
+                label(for='star1') 1 stars
+
+        unless locals.authenticated
+            p.notloggedtext Please Log In or Register to add a rating and write a review!
+    script(src='/javascripts/ratings.js')
+
