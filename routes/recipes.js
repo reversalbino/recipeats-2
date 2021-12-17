@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get("/:id", csrfProtection, async (req, res, next) => {
-    const userId = req.session.auth.userId; //gives error when logged out --> fix this
+    let userId = null;
     const recipeId = req.params.id;
     const recipe = await db.Recipe.findByPk(req.params.id, {
       include: [db.Ingredient, db.Instruction],
@@ -27,12 +27,13 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
       where: { recipeId: req.params.id },
     });
     if (req.session.auth) {
+        userId = req.session.auth.userId; //gives error when logged out --> fix this
       recipeBoards = await db.Board.findAll({
         where: { userId: req.session.auth.userId },
       });
     }
     const recipeRatings = await db.Rating.findAll({ where: { recipeId } });
-    console.log(recipeRatings);
+    // console.log(recipeRatings);
     let sum = recipeRatings.reduce(function (sum, rating) {
       return sum + rating;
     }, 0);
@@ -46,6 +47,7 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
       recipeBoards,
       reviews,
       userId,
+      errors,
       avgratings,
       csrfToken: req.csrfToken(),
     });
@@ -61,6 +63,10 @@ router.post('/:rId/boards', async (req, res, next) => {
     // console.log('--------ADD RECIPE TO BOARD 2');
     const recipeId = req.params.rId
     const boardId = req.body.addToBoard
+    const recipe = await db.Recipe.findByPk(recipeId);
+    const board= await db.Board.findByPk(boardId);
+    console.log('--------------', recipe, recipeId);
+    console.log('--------------', board, boardId);
     //NOTE query all recipes on a specific board that belong to a user
 
 
@@ -74,19 +80,19 @@ router.post('/:rId/boards', async (req, res, next) => {
     })
 
     if(!recipeIdList.includes(parseInt(recipeId, 10))) {
+        console.log('made it here');
         let addedRecipe = await db.RecipesOnBoard.create({
         recipeId,
             boardId
         });
-        errors = []
+        res.redirect(`/boards/${boardId}`)
     } else {
-        errors.push('Recipe is already on this board');
-
+        errors.push(`${recipe.title} is already on ${board.name}`);
+        res.redirect(`/recipes/${recipeId}`)
     }
 
     // console.log('BOOLEAN TEST', recipeIdList.includes(recipeId), recipeId) //TRUE
     // console.log("---------------------------------", `recipeIdList: ${recipeIdList}`)
-    res.redirect(`/recipes/${recipeId}`)
 })
 
 
