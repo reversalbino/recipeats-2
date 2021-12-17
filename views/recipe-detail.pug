@@ -36,29 +36,29 @@ block content
                 p= instruction.specification
     div.reviewsContainer
         if locals.authenticated
-            form(action= `/recipes/${recipe.id}/review/add`, method="post" id="submitReviewForm")
-                input(type="hidden" value=csrfToken name="_csrf")
-                textarea(name="reviewbody" value= reviews.reviewText maxlength='255' )
-                button(type="submit" id="submitReviewButton" value=`${recipe.id}`) Submit Review
-        if reviews
-            table
-                thead
-                    tr
-                        th username
-                        th review
-                tbody.red
-                    each review in reviews
-                        tr(class=`reviewRow-${review.id}` id=`${review.userId}`)
-                            td(class="reviewUserId")= review.userId
-                            td(class=`reviewText-${review.id}` contenteditable="false")= review.reviewText
-                        if locals.userId === review.userId
+            p Logged In User
+            if !userHasReview
+                form(action= `/recipes/${recipe.id}/review/add`, method="post" id="submitReviewForm")
+                    input(type="hidden" value=csrfToken name="_csrf")
+                    textarea(name="reviewbody" value= reviews.reviewText maxlength='255' )
+                    button(type="submit" id="submitReviewButton" value=`${recipe.id}`) Submit Review
+        div#individual-reviews
+            if reviews
+                each review in reviews 
+                    div(class=`single-review-${review.id} red`)
+                        p.username= review.userId
+                        br
+                        p(class=`review-body-${review.id}`)= review.reviewText
+                        br
+
+                        if locals.userId === review.userId 
                             form.editform(action=`/recipes/reviews/${review.id}/edit`, method="post")
                                 button(value=`${review.id}` class="editbtn")#editButton Edit
                             form.deleteform(action=`/recipes/reviews/${review.id}/delete`, method="post")
                                 button(value=`${review.id}` class="deletebtn")#deleteButton Delete
-        if locals.authenticated
+        if userId
             div.addrating
-                input#star5.star(type='radio' name='rating' value='5' userId=locals.userId)
+                input#star5.star(type='radio' name='rating' value='5' userId=userId)
                 label(for='star5') 5 stars
                 input#star4.star(type='radio' name='rating' value='4' userId=locals.userId)
                 label(for='star4') 4 stars
@@ -72,4 +72,3 @@ block content
         unless locals.authenticated
             p.notloggedtext Please Log In or Register to add a rating and write a review!
     script(src='/javascripts/ratings.js')
-

@@ -6,50 +6,94 @@ window.addEventListener("load", (event)=>{
     const editButtons = document.querySelectorAll('#editButton');
     const submitButton = document.querySelector('#submitReviewButton');
 
-    submitButton.addEventListener('click', async(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        const reviewForm = document.querySelector('#submitReviewForm');
-        const formData = new FormData(reviewForm);
-        console.log('-------form data-------', formData)
-        const recipeId = e.target.value
-        const reviewText = formData.get('reviewbody');
-        // reviewForm.reset();
+    console.log(submitButton);
 
-        // // const storedComments = JSON.parse(localStorage.comments);
-        // // storedComments.push(commentText);
-        // // localStorage.comments = JSON.stringify(storedComments);
+    if(submitButton) {
+        submitButton.addEventListener('click', async(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            const reviewForm = document.querySelector('#submitReviewForm');
+            const formData = new FormData(reviewForm);
+            console.log('-------form data-------', formData)
+            const recipeId = e.target.value
+            const reviewText = formData.get('reviewbody');
+            // reviewForm.reset();
 
-        // // const review = createComment(reviewText);
+            // // const storedComments = JSON.parse(localStorage.comments);
+            // // storedComments.push(commentText);
+            // // localStorage.comments = JSON.stringify(storedComments);
 
-        // // const reviews = document.querySelector(".comments");
-        // reviewForm.appendChild(reviewText);
+            // // const review = createComment(reviewText);
 
-        const res = await fetch(`/recipes/${recipeId}/review/add`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({reviewbody: reviewText})
-        });
+            // // const reviews = document.querySelector(".comments");
+            // reviewForm.appendChild(reviewText);
 
-        localStorage.clear();
+            const res = await fetch(`/recipes/${recipeId}/review/add`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({reviewbody: reviewText})
+            });
 
-        const data = await res.json()
+            localStorage.clear();
 
-        if (data.message === "Success") {
-            const review = document.querySelector(`.red`)
-            console.log('------------REVIEW------------', review)
-            const tr = document.createElement('tr')
-            // tr.classList.add('reviewRow-${review.id}')
-            // tr.setAttribute('id', '${review.userId}')
-            const td = document.createElement('td')
-            const td2 = document.createElement('td')
-            td.appendChild(document.createTextNode(data.userId))
-            td2.appendChild(document.createTextNode(reviewText))
-            tr.appendChild(td)
-            tr.appendChild(td2)
-            review.appendChild(tr)
-        }
-    })
+            const data = await res.json()
+
+            if (data.message === "Success") {
+                // const review = document.querySelector(`.red`)
+                // console.log('------------REVIEW------------', review)
+                // const tr = document.createElement('tr')
+                // // tr.classList.add('reviewRow-${review.id}')
+                // // tr.setAttribute('id', '${review.userId}')
+                // const td = document.createElement('td')
+                // const td2 = document.createElement('td')
+                // td.appendChild(document.createTextNode(data.userId))
+                // td2.appendChild(document.createTextNode(reviewText))
+                // tr.appendChild(td)
+                // tr.appendChild(td2)
+                // review.appendChild(tr)
+                let newElement = document.createElement('div');
+                newElement.setAttribute('class', `single-review-${data.reviewId}`);
+
+                let username = document.createElement('p');
+                username.setAttribute('class', 'username');
+                username.innerText = data.userId;
+                newElement.appendChild(username);
+
+                let br = document.createElement('br');
+                newElement.appendChild(br);
+
+                let reviewBody = document.createElement('p');
+                reviewBody.setAttribute('class', `review-body-${data.reviewId}`);
+                reviewBody.innerText = reviewText;
+                newElement.appendChild(reviewBody);
+                
+                let editForm = document.createElement('form');
+                let deleteForm = document.createElement('form');
+                let editButton = document.createElement('button');
+                let deleteButton = document.createElement('button');
+
+                editButton.setAttribute('id', 'editButton');
+                deleteButton.setAttribute('id', 'deleteButton');
+
+                editButton.innerText = 'Edit';
+                deleteButton.innerText = 'Delete';
+
+                editForm.setAttribute('action', `/recipes/reviews/${data.reviewId}/edit`);
+                editForm.setAttribute('method', 'POST');
+
+                deleteForm.setAttribute('action', `/recipes/reviews/${data.reviewId}/delete`);
+                deleteForm.setAttribute('method', 'POST');
+
+                editForm.appendChild(editButton);
+                deleteForm.appendChild(deleteButton);
+
+                newElement.appendChild(editForm);
+                newElement.appendChild(deleteForm);
+
+                document.getElementById('individual-reviews').appendChild(newElement);
+            }
+        })
+    }
 
 
     for (let i = 0; i < deleteButtons.length; i++) {
@@ -64,7 +108,7 @@ window.addEventListener("load", (event)=>{
             const data = await res.json()
             // console.log(data)
             if (data.message === "Success") {
-                const review = document.querySelector(`.reviewRow-${reviewId}`)
+                const review = document.querySelector(`.single-review-${reviewId}`);
                 review.remove()
             }
         })
@@ -77,9 +121,11 @@ window.addEventListener("load", (event)=>{
             e.stopPropagation();
 
             const reviewId = e.target.value;
-            const reviewText = document.querySelector(`.reviewText-${reviewId}`)
+            const reviewText = document.querySelector(`.review-body-${reviewId}`)
 
             reviewText.contentEditable == 'true' ? reviewText.contentEditable = 'false' : reviewText.contentEditable = 'true';
+
+            button.innerText = reviewText.contentEditable == 'false' ? 'Edit' : 'Update';
 
             if(reviewText.contentEditable === 'false') {
                 localStorage.setItem('reviewText', reviewText.innerText);
@@ -95,6 +141,8 @@ window.addEventListener("load", (event)=>{
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({theReviewText: localStorage.getItem('reviewText')})
             });
+
+
 
             localStorage.clear();
 
