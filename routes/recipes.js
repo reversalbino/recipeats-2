@@ -16,26 +16,41 @@ router.get('/', async (req, res, next) => {
     res.render('recipes', { recipes })
 })
 
-router.get('/:id', csrfProtection, async (req, res, next) => {
-    const userId = req.session.auth.userId
+router.get("/:id", csrfProtection, async (req, res, next) => {
+    const userId = req.session.auth.userId; //gives error when logged out --> fix this
+    const recipeId = req.params.id;
     const recipe = await db.Recipe.findByPk(req.params.id, {
-        include: [db.Ingredient, db.Instruction]
+      include: [db.Ingredient, db.Instruction],
     });
- let recipeBoards;
+    let recipeBoards;
     const reviews = await db.Review.findAll({
-        where: {recipeId: req.params.id}
+      where: { recipeId: req.params.id },
     });
-    if(req.session.auth) {
-        recipeBoards = await db.Board.findAll({
-            where: {userId: req.session.auth.userId}
-        })
+    if (req.session.auth) {
+      recipeBoards = await db.Board.findAll({
+        where: { userId: req.session.auth.userId },
+      });
     }
+    const recipeRatings = await db.Rating.findAll({ where: { recipeId } });
+    console.log(recipeRatings);
+    let sum = recipeRatings.reduce(function (sum, rating) {
+      return sum + rating;
+    }, 0);
+    let avgratings = sum / recipeRatings.length;
     //    const instructionList = instructions.forEach(instruction => {
-        //            console.log(instruction.dataValues.specification.split(','))
-        //        })
-        //        console.log(instructionList)
-        res.render('recipe-detail', { recipe, recipeBoards, reviews, userId, csrfToken: req.csrfToken()})
-});
+    //            console.log(instruction.dataValues.specification.split(','))
+    //        })
+    //        console.log(instructionList)
+    res.render("recipe-detail", {
+      recipe,
+      recipeBoards,
+      reviews,
+      userId,
+      avgratings,
+      csrfToken: req.csrfToken(),
+    });
+  });
+  
 
 // router.use((req, res, next) => {
 //     // console.log('--------ADD RECIPE TO BOARD 1');
@@ -133,6 +148,49 @@ router.delete('/reviews/:id/delete', requireAuth, asyncHandler(async(req, res, n
     //  .destroy();
 
 }));
+
+router.post("/:id/:uId/:rating",requireAuth, asyncHandler(async (req, res, next) => {
+    console.log("------------------edit 2-----");
+    const recipeId = req.params.id;
+    const userId = req.params.uId;
+    const value = req.params.rating
+    // const ratings = db.Rating.findAll({where: {recipeId}});
+    
+    if (req.session.auth) {
+        let userRating = await db.Rating.findAll({where: {userId, recipeId}})
+        if(userRating) {
+            console.log('here  we are')
+            for (let i = 0; i < userRating.length; i++) {
+                await userRating[i].destroy()
+            }
+        }
+        console.log('didnt make it')
+        await db.Rating.create({value, recipeId, userId })
+        const recipeRatings = await db.Rating.findAll({ where: { recipeId } });
+        let sum;
+        console.log(recipeRatings)
+        if (recipeRatings.length === 0) {
+            console.log('in IF STATEMENT')
+            sum = -1
+            res.json({message: 'success', avgrating: sum })
+        } else {
+            console.log('in ELSE STATEMENT')
+            sum = recipeRatings.reduce(function (sum, rating) {
+            return sum + rating.value;
+        }, 0);
+        console.log('SUM of ratings', sum)
+        let avgratings = sum / recipeRatings.length;
+        //round to nearest .5
+        Math.round()
+        res.json({message: 'success', avgrating: avgratings })
+        }
+    } else {
+        res.json({message: 'failure'})
+    }
+
+  })
+);
+
 
 
 
