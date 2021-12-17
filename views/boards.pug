@@ -1,0 +1,15 @@
+extends layout.pug 
+
+block content
+    form.add-board(method="get" action="/boards/new")
+        input(type="hidden" value=csrfToken name="_csrf")
+        button.add-board-btn Create a Board
+    if boards.length > 0
+        ul Boards List
+        for board in boards 
+            li: a.board-container(href=`/boards/${board.id}`)=board.name 
+            form.remove-board(method='POST' action=`/boards/delete/${board.id}`)
+                button.remove-board-button(type='submit') Delete Board
+    else 
+        p You have no boards :(
+        p test

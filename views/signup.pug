@@ -1,0 +1,21 @@
+extends layout.pug
+
+block content
+    if errors
+        div(class='error-message')
+            p The following error(s) occurred:
+            ul
+                each error in errors
+                    li= error
+    form(action="/users/signup", method="post")
+        input(type="hidden" value=csrfToken name="_csrf")
+        label(for="username") Username
+        input(type="text" name="username" value=username)
+        label(for="password") Password
+        input(type="password" name="password" value=password)
+        label(for="confirmPassword") Confirm Password
+        input(type="password" name="confirmPassword" value=confirmPassword)
+        button(type="submit") Sign Up
+        a(href='/') Cancel
+    div
+        p: a(href='/users/login') Already have an account?

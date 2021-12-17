@@ -1,0 +1,52 @@
+extends layout.pug
+
+block content
+    div.parentDivOne
+        div.imageDiv
+            img(src= recipe.image)
+        div.textDiv
+            h2= recipe.id
+            h1= recipe.title
+            h2= recipe.author
+            div.averagerating avg rating here
+            if locals.authenticated
+                if errors
+                    each error in errors
+                        li= error
+                a(href="/boards/new") Create a new board!
+                form(action=`/recipes/${recipe.id}/boards` method="post")
+                    select(name="addToBoard")
+                        each board in recipeBoards
+                            option(value= board.id)= board.name
+                    button(type="submit") Add to Board
+            if !locals.authenticated
+                a(href=`/users/login`) Log in to create a board!
+    div.parentDivTwo
+        div.ingredients
+            each ingredient in recipe.Ingredients
+                p= ingredient.amount + " " + ingredient.measurementUnit + " " + ingredient.name
+        div.instructions
+            each instruction in recipe.Instructions
+                p= instruction.specification
+    div.reviewsContainer
+        if locals.authenticated
+            form(action= `/recipes/${recipe.id}/review/add`, method="post" id="submitReviewForm")
+                input(type="hidden" value=csrfToken name="_csrf")
+                textarea(name="reviewbody" value= reviews.reviewText maxlength='255' )
+                button(type="submit" id="submitReviewButton" value=`${recipe.id}`) Submit Review
+        if reviews
+            table
+                thead
+                    tr
+                        th username
+                        th review
+                tbody.red
+                    each review in reviews
+                        tr(class=`reviewRow-${review.id}` id=`${review.userId}`)
+                            td(class="reviewUserId")= review.userId
+                            td(class=`reviewText-${review.id}` contenteditable="false")= review.reviewText
+                        if locals.userId === review.userId
+                            form.editform(action=`/recipes/reviews/${review.id}/edit`, method="post")
+                                button(value=`${review.id}` class="editbtn")#editButton Edit
+                            form.deleteform(action=`/recipes/reviews/${review.id}/delete`, method="post")
+                                button(value=`${review.id}` class="deletebtn")#deleteButton Delete

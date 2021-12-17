@@ -1,0 +1,14 @@
+extends layout.pug 
+
+block content 
+    form(action="/boards/new" method='post') 
+        input(type="hidden" value=csrfToken name="_csrf")
+        if errors.length > 0
+            div(class='error-message')
+                p The following error(s) occurred:
+                ul
+                    each error in errors
+                        li= error
+        label(for="boardName") Board Name
+        input(type="text" name="boardName" value=boardName)
+        button(type="submit") Create Board

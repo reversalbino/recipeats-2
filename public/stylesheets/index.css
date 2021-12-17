@@ -1,0 +1,13 @@
+h1 {
+    color: #555555;
+}
+
+.navBar {
+    margin: 20px;
+    padding: 10px;
+    display: flex;
+}
+
+.navButton {
+    padding: 10px;
+}

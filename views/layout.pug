@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+      block head
+        title= title
+        link(rel='stylesheet' href='/stylesheets/reset.css')
+        link(rel='stylesheet' href='/stylesheets/recipes.css')
+        link(rel='stylesheet' href='/stylesheets/recipe-detail.css')
+        link(rel='stylesheet' href='/stylesheets/index.css')
+        script(src='/javascripts/index.js')
+        script(src='/javascripts/reviews.js')
+
+  body
+     nav(class='navBar')
+      a(class='navButton' href='/') Home
+      a(class='navButton' href='/recipes') Recipes
+      div
+        ul
+        if locals.authenticated
+          a(href='/boards') Boards
+          span Welcome #{user.username}!
+          form(action='/users/logout' method='post')
+            button(class='navButton' type='submit') Logout
+        else
+          span(class='navbar-text px-4')
+            a(class='navButton' href='/users/login') Login
+            a(class='navButton' href='/users/signup') Sign up
+        block content
