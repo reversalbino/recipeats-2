@@ -17,7 +17,8 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get("/:id", csrfProtection, async (req, res, next) => {
-    let userId = null;
+    let userId = null, userHasReview = false;
+
     const recipeId = req.params.id;
     const recipe = await db.Recipe.findByPk(req.params.id, {
       include: [db.Ingredient, db.Instruction],
@@ -28,10 +29,27 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
     });
     if (req.session.auth) {
         userId = req.session.auth.userId; //gives error when logged out --> fix this
-      recipeBoards = await db.Board.findAll({
-        where: { userId: req.session.auth.userId },
-      });
+        recipeBoards = await db.Board.findAll({
+            where: { userId },
+        });
+
+        try {
+            let userReviews = await db.Review.findAll({
+                where: { recipeId, userId }
+            });
+
+            console.log(userReviews);
+
+            if(userReviews.length > 0) {
+                userHasReview = true;
+            }
+        } catch(e) {
+            console.log(e);
+        }
     }
+
+    console.log(userHasReview);
+
     const recipeRatings = await db.Rating.findAll({ where: { recipeId } });
     // console.log(recipeRatings);
     let sum = recipeRatings.reduce(function (sum, rating) {
@@ -49,6 +67,7 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
       userId,
       errors,
       avgratings,
+      userHasReview, 
       csrfToken: req.csrfToken(),
     });
   });
@@ -106,35 +125,48 @@ router.post('/:rId/boards', async (req, res, next) => {
 // }));
 
 router.post('/:id/review/add', requireAuth, asyncHandler(async(req, res, next) => {
-    console.log('------------------TESTING FOR CREATE REVIEW-----', req.body)
+    console.log('===================NOw ADDING REVIEW======================');
     const { reviewbody } = req.body
+
+    console.log(reviewbody);
     const userId = req.session.auth.userId
 
-    db.Review.create({
+    try {
+        let userExistingReview = await db.Review.findAll({
+            where: { recipeId, userId }
+        });
+
+        res.json({message: 'Exists'});
+    } catch (e) {
+        console.log(e);
+    }
+
+    let newReview = db.Review.create({
         reviewText: reviewbody,
         recipeId: req.params.id,
         userId
-    })
-    res.json({message: 'Success', userId: userId})
-}));
+    });
 
-router.use((req, res, next) => {
-    console.log('------------------edit 1-----');
-    next();
-})
+    let reviewId = newReview.id;
+
+    res.json({message: 'Success', userId: userId, reviewId})
+}));
 
 router.post('/reviews/:id/edit', requireAuth, asyncHandler(async(req, res, next) => {
     const {theReviewText} = req.body;
     console.log('==================================', theReviewText, '====================================');
-    const reviewToUpdate = await db.Review.findByPk(req.params.id);
-    if (reviewToUpdate) {
+    
+    try {
+        const reviewToUpdate = await db.Review.findByPk(req.params.id);
         await reviewToUpdate.update({
             reviewText: theReviewText
         });
-        res.json({message: 'Success'})
-    } else {
-        res.json({message: 'Failure'})
+        res.json({ message: 'Success' })
+    } catch(e) {
+        console.log(e);
     }
+         
+    res.json({message: 'Failure'})
 }));
 
 router.delete('/reviews/:id/delete', requireAuth, asyncHandler(async(req, res, next) => {
