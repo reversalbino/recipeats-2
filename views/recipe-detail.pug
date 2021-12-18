@@ -36,7 +36,6 @@ block content
                 p= instruction.specification
     div.reviewsContainer
         if locals.authenticated
-            p Logged In User
             if !userHasReview
                 form(action= `/recipes/${recipe.id}/review/add`, method="post" id="submitReviewForm")
                     input(type="hidden" value=csrfToken name="_csrf")
