@@ -71,12 +71,6 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
       csrfToken: req.csrfToken(),
     });
   });
-  
-
-// router.use((req, res, next) => {
-//     // console.log('--------ADD RECIPE TO BOARD 1');
-//     next();
-// });
 
 router.post('/:rId/boards', async (req, res, next) => {
     // console.log('--------ADD RECIPE TO BOARD 2');
@@ -130,30 +124,38 @@ router.post('/:id/review/add', requireAuth, asyncHandler(async(req, res, next) =
 
     console.log(reviewbody);
     const userId = req.session.auth.userId
+    const recipeId = req.params.id
+    let userExistingReview = [];
 
-    try {
-        let userExistingReview = await db.Review.findAll({
+    try{
+        userExistingReview = await db.Review.findAll({
             where: { recipeId, userId }
-        });
-
-        res.json({message: 'Exists'});
-    } catch (e) {
-        console.log(e);
+        })
+    } catch(e) {
+        console.log(e)
     }
-
-    let newReview = db.Review.create({
+    
+    
+    if (userExistingReview.length > 0) { 
+        res.json({message: 'Exists', userId, reviewId: userExistingReview[0].id})
+} else {
+    let newReview = await db.Review.create({
         reviewText: reviewbody,
-        recipeId: req.params.id,
+        recipeId,
         userId
     });
 
-    let reviewId = newReview.id;
+    let newReviewId = newReview.id;
+    console.log(newReviewId);
 
-    res.json({message: 'Success', userId: userId, reviewId})
+    res.json({message: 'Success', userId, reviewId: newReviewId})
+}
+
 }));
 
 router.post('/reviews/:id/edit', requireAuth, asyncHandler(async(req, res, next) => {
     const {theReviewText} = req.body;
+    console.log(req.body)
     console.log('==================================', theReviewText, '====================================');
     
     try {
@@ -161,12 +163,12 @@ router.post('/reviews/:id/edit', requireAuth, asyncHandler(async(req, res, next)
         await reviewToUpdate.update({
             reviewText: theReviewText
         });
-        res.json({ message: 'Success' })
+        await reviewToUpdate.save()
+        return res.json({ message: 'Success' })
     } catch(e) {
         console.log(e);
+        res.json({message: 'Failure'})
     }
-         
-    res.json({message: 'Failure'})
 }));
 
 router.delete('/reviews/:id/delete', requireAuth, asyncHandler(async(req, res, next) => {
@@ -196,7 +198,7 @@ router.post("/:id/:uId/:rating",requireAuth, asyncHandler(async (req, res, next)
     
     if (req.session.auth) {
         let userRating = await db.Rating.findAll({where: {userId, recipeId}})
-        if(userRating) {
+        if(userRating.length > 0) {
             console.log('here  we are')
             for (let i = 0; i < userRating.length; i++) {
                 await userRating[i].destroy()
