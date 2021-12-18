@@ -21,7 +21,7 @@ window.addEventListener("load", (event)=>{
 
             // // const storedComments = JSON.parse(localStorage.comments);
             // // storedComments.push(commentText);
-            // // localStorage.comments = JSON.stringify(storedComments);
+            // localStorage.comments = JSON.stringify(storedComments);
 
             // // const review = createComment(reviewText);
 
@@ -66,29 +66,33 @@ window.addEventListener("load", (event)=>{
                 reviewBody.setAttribute('class', `review-body-${data.reviewId}`);
                 reviewBody.innerText = reviewText;
                 newElement.appendChild(reviewBody);
+
+                //add this back for dynamic edit/delete after submit/create
                 
-                let editForm = document.createElement('form');
-                let deleteForm = document.createElement('form');
-                let editButton = document.createElement('button');
-                let deleteButton = document.createElement('button');
+                // let editForm = document.createElement('form');
+                // let deleteForm = document.createElement('form');
+                // let editButton = document.createElement('button');
+                // let deleteButton = document.createElement('button');
 
-                editButton.setAttribute('id', 'editButton');
-                deleteButton.setAttribute('id', 'deleteButton');
+                // editButton.setAttribute('id', 'editButton');
+                // editButton.setAttribute('value', `${data.reviewId}`);
+                // deleteButton.setAttribute('id', 'deleteButton');
+                // deleteButton.setAttribute('value', `${data.reviewId}`);
 
-                editButton.innerText = 'Edit';
-                deleteButton.innerText = 'Delete';
+                // editButton.innerText = 'Edit';
+                // deleteButton.innerText = 'Delete';
 
-                editForm.setAttribute('action', `/recipes/reviews/${data.reviewId}/edit`);
-                editForm.setAttribute('method', 'POST');
+                // editForm.setAttribute('action', `/recipes/reviews/${data.reviewId}/edit`);
+                // editForm.setAttribute('method', 'POST');
 
-                deleteForm.setAttribute('action', `/recipes/reviews/${data.reviewId}/delete`);
-                deleteForm.setAttribute('method', 'POST');
+                // deleteForm.setAttribute('action', `/recipes/reviews/${data.reviewId}/delete`);
+                // deleteForm.setAttribute('method', 'POST');
 
-                editForm.appendChild(editButton);
-                deleteForm.appendChild(deleteButton);
+                // editForm.appendChild(editButton);
+                // deleteForm.appendChild(deleteButton);
 
-                newElement.appendChild(editForm);
-                newElement.appendChild(deleteForm);
+                // newElement.appendChild(editForm);
+                // newElement.appendChild(deleteForm);
 
                 document.getElementById('individual-reviews').appendChild(newElement);
             }
@@ -122,6 +126,7 @@ window.addEventListener("load", (event)=>{
 
             const reviewId = e.target.value;
             const reviewText = document.querySelector(`.review-body-${reviewId}`)
+            console.log('=========+++', reviewId, reviewText)
 
             reviewText.contentEditable == 'true' ? reviewText.contentEditable = 'false' : reviewText.contentEditable = 'true';
 
@@ -143,10 +148,9 @@ window.addEventListener("load", (event)=>{
             });
 
 
-
             localStorage.clear();
 
-            const data = await res.json()
+            const data = await res.json();
 
             if (data.message === "Success") {
                 const review = document.querySelector(`.reviewRow-${reviewId}`)
