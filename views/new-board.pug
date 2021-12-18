@@ -1,4 +1,6 @@
 extends layout.pug 
+append head
+    link(rel='stylesheet' href='/stylesheets/new-board.css')
 
 block content 
     form(action="/boards/new" method='post') 

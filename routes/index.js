@@ -1,10 +1,15 @@
 const express = require('express');
-const router = express.Router();
+const db = require('../db/models'); //db.Model
+const router = express.Router()
 //test
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'a/A Express Skeleton Home' });
+router.get('/', async function(req, res, next) {
+  const recipes = await db.Recipe.findAll({
+    order: [ ['title', 'ASC'] ],
+    limit: 10
+    });
+  res.render("index", { title: 'Home', recipes });
 });
 
 module.exports = router;

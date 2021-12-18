@@ -1,13 +1,15 @@
-h1 {
-    color: #555555;
+
+
+img {
+    width: 200px;
+    height: 200px;
 }
 
-.navBar {
-    margin: 20px;
-    padding: 10px;
+
+.homepageRecipes {
     display: flex;
-}
-
-.navButton {
-    padding: 10px;
-}
+    gap: 10px;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+};
