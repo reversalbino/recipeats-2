@@ -51,11 +51,29 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
     console.log(userHasReview);
 
     const recipeRatings = await db.Rating.findAll({ where: { recipeId } });
-    // console.log(recipeRatings);
+    console.log('recipe ratings: ' , recipeRatings);
     let sum = recipeRatings.reduce(function (sum, rating) {
-      return sum + rating;
+      return sum + rating.value;
     }, 0);
     let avgratings = sum / recipeRatings.length;
+
+    let userRating
+
+    try {
+        userRating = await db.Rating.findOne({
+            where: {userId, recipeId}
+        })
+
+        userRating = userRating.value;
+
+        console.log('============User Rating==============', userRating);
+    } catch (e) {
+        console.log(e);
+    }
+
+    avgratings = (Math.round(avgratings * 2) / 2);
+
+    console.log('==========================', avgratings, '========================');
     //    const instructionList = instructions.forEach(instruction => {
     //            console.log(instruction.dataValues.specification.split(','))
     //        })
@@ -67,7 +85,8 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
       userId,
       errors,
       avgratings,
-      userHasReview, 
+      userHasReview,
+      userRating,
       csrfToken: req.csrfToken(),
     });
   });
@@ -197,33 +216,28 @@ router.post("/:id/:uId/:rating",requireAuth, asyncHandler(async (req, res, next)
     // const ratings = db.Rating.findAll({where: {recipeId}});
     
     if (req.session.auth) {
-        let userRating = await db.Rating.findAll({where: {userId, recipeId}})
-        if(userRating.length > 0) {
-            console.log('here  we are')
-            for (let i = 0; i < userRating.length; i++) {
-                await userRating[i].destroy()
-            }
+        let userRating = await db.Rating.findOne({where: {userId, recipeId}})
+
+        if(userRating) {
+            console.log('made it here');
+            await userRating.update({
+                value: value
+            })
         }
-        console.log('didnt make it')
-        await db.Rating.create({value, recipeId, userId })
+        else {
+            await db.Rating.create({ value, recipeId, userId })
+        } 
         const recipeRatings = await db.Rating.findAll({ where: { recipeId } });
         let sum;
-        console.log(recipeRatings)
-        if (recipeRatings.length === 0) {
-            console.log('in IF STATEMENT')
-            sum = -1
-            res.json({message: 'success', avgrating: sum })
-        } else {
-            console.log('in ELSE STATEMENT')
-            sum = recipeRatings.reduce(function (sum, rating) {
+
+        sum = recipeRatings.reduce(function (sum, rating) {
             return sum + rating.value;
         }, 0);
-        console.log('SUM of ratings', sum)
         let avgratings = sum / recipeRatings.length;
         //round to nearest .5
-        Math.round()
-        res.json({message: 'success', avgrating: avgratings })
-        }
+        avgratings = Math.round(avgratings * 2) / 2
+        console.log(avgratings);
+        res.json({ message: 'success', avgrating: avgratings })
     } else {
         res.json({message: 'failure'})
     }

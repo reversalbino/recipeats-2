@@ -10,9 +10,10 @@ block content
             h2= recipe.author
             div#rating-container
                 if avgratings > 0
-                    while avgratings--
-                        for avgrating in avgratings
-                            p.recipeRating One Star
+                    while avgratings-- && avgratings > -.1
+                        p.recipeRating One Star
+                    if avgratings === -.5
+                        p.halfStar Half Star
                 else 
                     p.no-ratings-yet Leave the first rating!
             if locals.authenticated
@@ -57,16 +58,16 @@ block content
                                 button(value=`${review.id}` class="deletebtn")#deleteButton Delete
         if userId
             div.addrating
-                input#star5.star(type='radio' name='rating' value='5' userId=userId)
-                label(for='star5') 5 stars
-                input#star4.star(type='radio' name='rating' value='4' userId=locals.userId)
-                label(for='star4') 4 stars
-                input#star3.star(type='radio' name='rating' value='3' userId=locals.userId)
-                label(for='star3') 3 stars
-                input#star2.star(type='radio' name='rating' value='2' userId=locals.userId)
-                label(for='star2') 2 stars
-                input#star1.star(type='radio' name='rating' value='1' userId=locals.userId)
+                input#star1.star(type='radio' name='rating' value='1' userId=locals.userId checked= userRating===1)
                 label(for='star1') 1 stars
+                input#star2.star(type='radio' name='rating' value='2' userId=locals.userId checked= userRating===2)
+                label(for='star2') 2 stars
+                input#star3.star(type='radio' name='rating' value='3' userId=locals.userId checked= userRating===3)
+                label(for='star3') 3 stars
+                input#star4.star(type='radio' name='rating' value='4' userId=locals.userId checked= userRating===4)
+                label(for='star4') 4 stars
+                input#star5.star(type='radio' name='rating' value='5' userId=locals.userId checked= userRating===5)
+                label(for='star5') 5 stars
 
         unless locals.authenticated
             p.notloggedtext Please Log In or Register to add a rating and write a review!
