@@ -11,13 +11,21 @@ html
 
   body
     nav(class='navBar')
-      a(class='navButton' href='/') Home
-      a(class='navButton' href='/recipes') Recipes
-      if locals.authenticated
-        a(href='/boards') Boards
-        form(action='/users/logout' method='post')
-          button(class='navButton' type='submit') Logout
-      else
-        a(class='navButton' href='/users/login') Login
-        a(class='navButton' href='/users/signup') Sign up
+      a( href='/') 
+        h1.logo recip<b>eats</b>
+      div.navLinks
+        a(class='navButton' href='/recipes') Recipes
+        if locals.authenticated
+          a(href='/boards') Boards
+          form(action='/users/logout' method='post')
+            button(class='navButton' type='submit').logout Logout
+        else
+          a(class='navButton' href='/users/login').login Login
+          a(class='navButton' href='/users/signup').signup Sign up
     block content
+  footer 
+    div.footer
+      a(href="") Terms of Service  
+      a(href="") Contact
+      a(href="/recipes") Recipes
+      a(href="") Newsletter
