@@ -5,12 +5,13 @@ append head
     
 block content
     h2 Sign in to your account
-    if errors
-        div(class='error-message')
-            p The following error(s) occurred:
-            ul
-                each error in errors
-                    li= error
+    div.errorDiv
+        if errors
+            div(class='error-message')
+                p The following error(s) occurred:
+                ul.errors
+                    each error in errors
+                        li.liErrors= error
     div.loginForm
         form(action="/users/login", method="post")
             div.loginFields

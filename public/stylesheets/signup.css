@@ -6,6 +6,32 @@
     justify-content: center;
 
 }
+.errorDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.errors {
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.error-message {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    flex-wrap: wrap;
+}
+
+.liErrors {
+    flex-wrap: wrap;
+    color: red;
+}
+
 input {
     margin: 10px 0 15px 0;
     padding: 15px;

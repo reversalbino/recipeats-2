@@ -7,6 +7,22 @@
     justify-content: center;
 
 }
+
+.errorDiv {
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.errors {
+    align-self: center;
+}
+.liErrors {
+    flex-wrap: wrap;
+    color: red;
+
+}
+
 h2 {
     text-align: center;
     padding: 50px 0 0 20px;

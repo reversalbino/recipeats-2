@@ -1,3 +1,4 @@
+
 .homepageRecipes {
     width: 80%;
     height: auto;
@@ -6,8 +7,17 @@
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
     grid-gap: 20px;
-
+ 
 }
+/* //NOTE media screen should not be moved */
+@media only screen and (max-width: 1500px) {
+    .homepageRecipes {
+        margin: 0 auto;
+        display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
 
 h2 {
    padding: 10px 0 0 20px;
@@ -29,6 +39,7 @@ h2 {
     display: flex;
     flex-direction: column;
     flex-shrink: inherit;
+
 }
 
 .homepageEachRecipe a{
@@ -60,4 +71,5 @@ h2 {
     height: 300px;
     padding: 20px 15px 0px 15px;
     text-align: center;
+
 }

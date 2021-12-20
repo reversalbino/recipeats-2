@@ -4,13 +4,14 @@ append head
     link(rel='stylesheet' href='/stylesheets/signup.css')
     
 block content
-  h2 Sign up for an account
-    if errors
-        div(class='error-message')
-            p The following error(s) occurred:
-            ul
-                each error in errors
-                    li= error
+    h2 Sign up for an account
+    div.errorDiv
+        if errors
+            div(class='error-message')
+                p The following error(s) occurred:
+                ul.errors
+                    each error in errors
+                        li.liErrors= error
     div.signupForm
         form(action="/users/signup", method="post")
             div.signupFields
