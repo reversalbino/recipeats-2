@@ -1,1 +1,56 @@
-/* comment */
+.loginForm {
+    padding-top: 20px;
+    padding-bottom: 100%;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+
+}
+h2 {
+    text-align: center;
+    padding: 50px 0 0 20px;
+    font-size: 35px;
+    font-family: serif;
+}
+input {
+    margin: 10px 0 15px 0;
+    padding: 15px;
+    width: 300px;
+    height: 50px;
+    /* border: none; */
+    background-color: #f5f7f8;
+    border: gray;
+}
+
+.loginFields{
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginButton, .demoButton {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    width: 300px;
+    height: 50px;
+    margin: 10px;
+    font-size: 15px;
+}
+
+.demoButton a{
+    text-decoration: none;
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+p {
+    text-align: center;
+}

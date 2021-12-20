@@ -4,20 +4,22 @@ append head
     link(rel='stylesheet' href='/stylesheets/login.css')
     
 block content
+    h2 Sign in to your account
     if errors
         div(class='error-message')
             p The following error(s) occurred:
             ul
                 each error in errors
                     li= error
-    form(action="/users/login", method="post")
-        input(type="hidden" value=csrfToken name="_csrf")
-        label(for="username") Username
-        input(type="text" name="username" value=username)
-        label(for="password") Password
-        input(type="password" name="password" value=password)
-        button(type="submit") Log in
-        button 
-            a(href='/users/login/demo') Demo User
-    div
-        p: a(href='/users/signup') Don't have an account? Create one now 
+    div.loginForm
+        form(action="/users/login", method="post")
+            div.loginFields
+                input(type="hidden" value=csrfToken name="_csrf")
+                label(for="username") Username
+                input(type="text" name="username" value=username)
+                label(for="password") Password
+                input(type="password" name="password" value=password)
+                button(type="submit" class="loginButton") Log in
+                button(type="submit" class="demoButton")
+                    a(href='/users/login/demo') Demo User
+                p: a(href='/users/signup') Don't have an account? Create one now 

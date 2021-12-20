@@ -26,14 +26,16 @@ block content
         div.catDiv
             each recipe in recipes
                 if recipe.categoryId > 2 && recipe.categoryId < 4
-                    a(href=`/recipes/${recipe.id}`)
-                        img(src= recipe.image)
-                        h3= recipe.title
+                    div.recipeContainer
+                        a(href=`/recipes/${recipe.id}`)
+                            img(src= recipe.image)
+                            h3= recipe.title
 
         h2 Vietnamese
         div.catDiv
             each recipe in recipes
                 if recipe.categoryId > 3
-                    a(href=`/recipes/${recipe.id}`)
-                        img(src= recipe.image)
-                        h3= recipe.title
+                    div.recipeContainer
+                        a(href=`/recipes/${recipe.id}`)
+                            img(src= recipe.image)
+                            h3= recipe.title
