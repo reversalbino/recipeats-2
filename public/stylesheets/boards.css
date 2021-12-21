@@ -1,1 +1,63 @@
-/* comment */
+* {
+	text-decoration: none;
+	list-style-type: none;
+}
+
+ul {
+	font-size: 40px;
+    padding: 12px;
+}
+
+.parent-board-list {
+	margin-top: 93px;
+}
+
+.add-board-form {
+	margin: 10px;
+	display: flex;
+	justify-content: center;
+}
+.add-board-btn {
+	width: 248px;
+	height: 41px;
+	font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    margin: 40px;
+}
+.add-board-btn:hover {
+    border: none;
+    background: #8d8b8b;
+    color: #fff;
+    border-radius: 5px;
+    transition: all 500ms ease;
+}
+.board-list {
+	display: flex;
+	flex-direction: column;
+	margin: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.remove-board-button {
+	width: 100px;
+	height: 20px;
+	margin: 10px;
+	font-size: 12px;
+    border-radius: 5px;
+    border: none;
+}
+.remove-board-button:hover {
+    border: none;
+    background: #8d8b8b;
+    color: #fff;
+    border-radius: 5px;
+    transition: all 500ms ease;
+}
+.specific-board {
+	display: flex;
+    flex-direction: row;
+    padding: 10px;
+    gap: 15px;
+    align-items: center;
+}
