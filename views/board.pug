@@ -15,5 +15,7 @@ block content
                             form(method='POST' action=`/boards/${boardId}/${recipe.id}/delete`)
                                 button.delete-from-board-button(type='submit') Delete From Board
     else
-        h1.board-title= recipesOnSpecificBoard.name
-        p You have no recipes on this board :(
+        div.error-div
+            h1.board-title= recipesOnSpecificBoard.name
+            p You have no recipes on this board -
+                a(href='/recipes')  add recipes
