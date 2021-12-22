@@ -1,16 +1,21 @@
-extends layout.pug 
+extends layout.pug
 append head
     link(rel='stylesheet' href='/stylesheets/new-board.css')
 
-block content 
-    form(action="/boards/new" method='post') 
-        input(type="hidden" value=csrfToken name="_csrf")
-        if errors.length > 0
-            div(class='error-message')
-                p The following error(s) occurred:
-                ul
+block content
+    div.parent-div
+        form(action="/boards/new" method='post')
+            input(type="hidden" value=csrfToken name="_csrf")
+            if errors.length > 0
+                div.form-div-errors
+                    label(for="boardName" class="board-name-label") Board Name
+                    input(type="text" name="boardName" value=boardName class="board-name-input")
+                    button(type="submit" class="create-board-button") Create Board
+                div.error-message
                     each error in errors
-                        li= error
-        label(for="boardName") Board Name
-        input(type="text" name="boardName" value=boardName)
-        button(type="submit") Create Board
+                        p= error
+            else
+                div.form-div
+                    label(for="boardName" class="board-name-label") Board Name
+                    input(type="text" name="boardName" value=boardName class="board-name-input")
+                    button(type="submit" class="create-board-button") Create Board

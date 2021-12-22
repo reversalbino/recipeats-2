@@ -1,17 +1,19 @@
-extends layout.pug 
+extends layout.pug
 append head
     link(rel='stylesheet' href='/stylesheets/boards.css')
 
 block content
-    form.add-board(method="get" action="/boards/new")
-        input(type="hidden" value=csrfToken name="_csrf")
-        button.add-board-btn Create a Board
-    if boards.length > 0
-        ul Boards List
-        for board in boards 
-            li: a.board-container(href=`/boards/${board.id}`)=board.name 
-            form.remove-board(method='POST' action=`/boards/delete/${board.id}`)
-                button.remove-board-button(type='submit') Delete Board
-    else 
-        p You have no boards :(
-        p test
+    div.parent-board-list
+        form.add-board-form(method="get" action="/boards/new")
+            input(type="hidden" value=csrfToken name="_csrf")
+            button.add-board-btn Create a Board
+        if boards.length > 0
+            div.board-list
+                ul Your Boards
+                for board in boards
+                    div.specific-board
+                        li: a.board-container(href=`/boards/${board.id}`)=board.name
+                        form(method='POST' action=`/boards/delete/${board.id}`)
+                            button.remove-board-button(type='submit') Delete Board
+        else
+            p You have no boards :(

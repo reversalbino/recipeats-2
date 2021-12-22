@@ -1,14 +1,21 @@
-extends layout.pug 
+extends layout.pug
 append head
     link(rel='stylesheet' href='/stylesheets/board.css')
 
-block content 
-
+block content
     if recipesOnSpecificBoard.Recipes.length > 0
-        ul Recipes 
-            for recipe in recipesOnSpecificBoard.Recipes
-                li: a.recipe-container(href=`/recipes/${recipe.id}`)=recipe.title
-                    form(method='POST' action=`/boards/${boardId}/${recipe.id}/delete`)
-                        button(type='submit') Delete From Board
-    else 
-        p You have no recipes on this board :(
+        div.parentDiv
+            h1.board-title= recipesOnSpecificBoard.name
+            div.board-div
+                for recipe in recipesOnSpecificBoard.Recipes
+                    div.recipe-container
+                        a(href=`/recipes/${recipe.id}`)
+                            img(src= recipe.image)
+                            h3= recipe.title
+                            form(method='POST' action=`/boards/${boardId}/${recipe.id}/delete`)
+                                button.delete-from-board-button(type='submit') Delete From Board
+    else
+        div.error-div
+            h1.board-title= recipesOnSpecificBoard.name
+            p You have no recipes on this board -
+                a(href='/recipes')  add recipes

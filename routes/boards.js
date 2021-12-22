@@ -8,7 +8,7 @@ const res = require('express/lib/response');
 const router = express.Router();
 
 router.get('/', requireAuth, asyncHandler(async(req, res) => {
-    //display all user boards 
+    //display all user boards
     const {userId} = req.session.auth
     const boards = await db.Board.findAll({where: {userId}});
     res.render('boards', {title: 'Recipeats | Boards', boards})
@@ -102,4 +102,3 @@ router.post('/:bId/:rId/delete', requireAuth, asyncHandler(async(req, res) => {
 
 
 module.exports = router;
-
