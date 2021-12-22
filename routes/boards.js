@@ -53,7 +53,7 @@ router.get('/:id(\\d+)', requireAuth, asyncHandler(async(req, res) => {
     const boardId = req.params.id
     // console.log('----BID-----', boardId);
     let recipesOnSpecificBoard = await db.Board.findByPk(boardId,{
-        include: [ db.Recipe, db.Board ]
+        include: [ db.Recipe ]
     });
     console.log('================', recipesOnSpecificBoard.dataValues.Recipes[0]);
     // db.RecipesOnBoard.findAll();

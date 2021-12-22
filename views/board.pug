@@ -5,14 +5,15 @@ append head
 block content
     if recipesOnSpecificBoard.Recipes.length > 0
         div.parentDiv
-            h1= recipesOnSpecificBoard.Boards.id
-                div.catDiv
-                    for recipe in recipesOnSpecificBoard.Recipes
-                        div.recipe-container
-                            a(href=`/recipes/${recipe.id}`)
-                                img(src= recipe.image)
-                                h3= recipe.title
-                                form(method='POST' action=`/boards/${boardId}/${recipe.id}/delete`)
-                                    button.delete-from-board-button(type='submit') Delete From Board
+            h1.board-title= recipesOnSpecificBoard.name
+            div.board-div
+                for recipe in recipesOnSpecificBoard.Recipes
+                    div.recipe-container
+                        a(href=`/recipes/${recipe.id}`)
+                            img(src= recipe.image)
+                            h3= recipe.title
+                            form(method='POST' action=`/boards/${boardId}/${recipe.id}/delete`)
+                                button.delete-from-board-button(type='submit') Delete From Board
     else
+        h1.board-title= recipesOnSpecificBoard.name
         p You have no recipes on this board :(

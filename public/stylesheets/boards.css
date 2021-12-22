@@ -4,12 +4,17 @@
 }
 
 ul {
-	font-size: 40px;
-    padding: 12px;
+	padding: 12px;
+	font-size: 35px;
+	font-family: serif;
+	margin-bottom: 35px;
 }
 
 .parent-board-list {
-	margin-top: 93px;
+	margin-top: 15px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .add-board-form {
@@ -21,16 +26,16 @@ ul {
 	width: 248px;
 	height: 41px;
 	font-size: 12px;
-    border: none;
-    border-radius: 5px;
-    margin: 40px;
+	border: none;
+	border-radius: 5px;
+	margin: 40px;
 }
 .add-board-btn:hover {
-    border: none;
-    background: #8d8b8b;
-    color: #fff;
-    border-radius: 5px;
-    transition: all 500ms ease;
+	border: none;
+	background: #8d8b8b;
+	color: #fff;
+	border-radius: 5px;
+	transition: all 250ms ease;
 }
 .board-list {
 	display: flex;
@@ -39,25 +44,44 @@ ul {
 	align-items: center;
 	flex-wrap: wrap;
 }
+
+.board-container {
+	font-family: serif;
+	font-size: 25px;
+}
+
+.board-container:hover {
+	border-bottom: 1.75px solid black;
+}
+
 .remove-board-button {
-	width: 100px;
-	height: 20px;
+	width: 150px;
+	height: 28px;
 	margin: 10px;
 	font-size: 12px;
-    border-radius: 5px;
-    border: none;
+	border-radius: 5px;
+	border: none;
 }
 .remove-board-button:hover {
-    border: none;
-    background: #8d8b8b;
-    color: #fff;
-    border-radius: 5px;
-    transition: all 500ms ease;
+	border: none;
+	background: #8d8b8b;
+	color: #fff;
+	border-radius: 5px;
+	transition: all 250ms ease;
 }
 .specific-board {
-	display: flex;
-    flex-direction: row;
-    padding: 10px;
-    gap: 15px;
-    align-items: center;
+	display: grid;
+	padding: 10px;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	justify-items: start;
+}
+
+p {
+	text-align: center;
+}
+
+.footer {
+	width: 100%;
+	bottom: 0px;
 }
