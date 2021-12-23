@@ -21,8 +21,12 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
 
     const recipeId = req.params.id;
     const recipe = await db.Recipe.findByPk(req.params.id, {
-      include: [db.Ingredient, db.Instruction],
+      include: [db.Ingredient, db.Instruction, db.Category],
     });
+
+    let category = recipe.Category.name
+
+
     let recipeBoards;
     const reviews = await db.Review.findAll({
       where: { recipeId: req.params.id },
@@ -73,7 +77,15 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
 
     avgratings = (Math.round(avgratings * 2) / 2);
 
-    console.log('==========================', avgratings, '========================');
+    let instructions = recipe.Instructions[0].specification;
+    instructions = instructions.replace(`{"`, '');
+    instructions = instructions.replace(`"}`, '');
+    let formmattedInstructions = instructions.split(`","`);
+
+    formmattedInstructions.forEach(element => {
+        console.log(element);
+    });
+
     //    const instructionList = instructions.forEach(instruction => {
     //            console.log(instruction.dataValues.specification.split(','))
     //        })
@@ -87,6 +99,8 @@ router.get("/:id", csrfProtection, async (req, res, next) => {
       avgratings,
       userHasReview,
       userRating,
+      category,
+      formmattedInstructions,
       csrfToken: req.csrfToken(),
     });
   });

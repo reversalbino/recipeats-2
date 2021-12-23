@@ -1,20 +1,23 @@
 extends layout.pug
 
 block content
+
+    
+
     div.parentDivOne
         div.imageDiv
             img(src= recipe.image)
         div.textDiv
-            h2= recipe.id
-            h1= recipe.title
-            h2= recipe.author
+            h2#category= category
+            h1#recipe-title= recipe.title
+            h2#recipe-author= `By ${recipe.author}`
             div#rating-container
                 if avgratings > 0
                     while avgratings-- && avgratings > -.1
-                        p.recipeRating One Star
+                        <span class="fa fa-star checked"></span>
                     if avgratings === -.5
-                        p.halfStar Half Star
-                else 
+                        <span class="fa fa-star-half-o checked"></span>
+                else    
                     p.no-ratings-yet Leave the first rating!
             if locals.authenticated
                 if errors
@@ -26,21 +29,44 @@ block content
                         each board in recipeBoards
                             option(value= board.id)= board.name
                     button(type="submit") Add to Board
+                p#userId= locals.userId
             if !locals.authenticated
                 a(href=`/users/login`) Log in to create a board!
     div.parentDivTwo
-        div.ingredients
-            each ingredient in recipe.Ingredients
-                p= ingredient.amount + " " + ingredient.measurementUnit + " " + ingredient.name
-        div.instructions
-            each instruction in recipe.Instructions
-                p= instruction.specification
+        div#ingredients-container
+            h1#ingredients-header Ingredients
+            hr
+            div.ingredients
+                each ingredient in recipe.Ingredients
+                    p= ingredient.amount + " " + ingredient.measurementUnit + " " + ingredient.name
+        div#instructions-container
+            h1#ingredients-header Instructions
+            hr
+            div.instructions
+                each instruction in formmattedInstructions
+                    p= instruction
+                    br
+    hr#full-page
+    h1#ratings-and-reviews Ratings and Reviews
+    br
     div.reviewsContainer
+    
         if locals.authenticated
+            if userId
+                #temp-container
+                //- div.addrating
+                //-     //- input#star1.star(type='radio' name='rating' value='1' userId=locals.userId checked= userRating===1)
+                //-     if userRating >= 1 && userRating < 2
+                //-     span(class="fa fa-star" checked= `${oneStar}` name='rating' value='1' userId=locals.userId)
+                //-     input#star2.star(type='radio' name='rating' value='2' userId=locals.userId checked= userRating===2)
+                //-     input#star3.star(type='radio' name='rating' value='3' userId=locals.userId checked= userRating===3)
+                //-     input#star4.star(type='radio' name='rating' value='4' userId=locals.userId checked= userRating===4)
+                //-     input#star5.star(type='radio' name='rating' value='5' userId=locals.userId checked= userRating===5)
             if !userHasReview
                 form(action= `/recipes/${recipe.id}/review/add`, method="post" id="submitReviewForm")
                     input(type="hidden" value=csrfToken name="_csrf")
                     textarea(name="reviewbody" value= reviews.reviewText maxlength='255' )
+                    br
                     button(type="submit" id="submitReviewButton" value=`${recipe.id}`) Submit Review
         div#individual-reviews
             if reviews
@@ -56,18 +82,8 @@ block content
                                 button(value=`${review.id}` class="editbtn")#editButton Edit
                             form.deleteform(action=`/recipes/reviews/${review.id}/delete`, method="post")
                                 button(value=`${review.id}` class="deletebtn")#deleteButton Delete
-        if userId
-            div.addrating
-                input#star1.star(type='radio' name='rating' value='1' userId=locals.userId checked= userRating===1)
-                label(for='star1') 1 stars
-                input#star2.star(type='radio' name='rating' value='2' userId=locals.userId checked= userRating===2)
-                label(for='star2') 2 stars
-                input#star3.star(type='radio' name='rating' value='3' userId=locals.userId checked= userRating===3)
-                label(for='star3') 3 stars
-                input#star4.star(type='radio' name='rating' value='4' userId=locals.userId checked= userRating===4)
-                label(for='star4') 4 stars
-                input#star5.star(type='radio' name='rating' value='5' userId=locals.userId checked= userRating===5)
-                label(for='star5') 5 stars
+        br#ratings-separator
+        
 
         unless locals.authenticated
             p.notloggedtext Please Log In or Register to add a rating and write a review!

@@ -7,15 +7,94 @@
 
 .imageDiv {
     margin: 15px;
+    width: 50%;
+    overflow: hidden;
 }
 
 .textDiv {
     display: flex;
     flex-direction: column;
+    margin: auto;
+}
+
+#recipe-title {
+    margin: 20px;
+    text-align: center;
+}
+
+hr {
+    height: 5px;
+    width: 50%;
+    background-color: black;
+    margin:0%
+}
+
+#ingredients-header {
+    font-size: 36px;
+}
+
+.textDiv h1, .textDiv h2, .textDiv div, .textDiv a, .textDiv form {
+    margin: auto;
+}
+
+.textDiv form {
+    padding: 10px;
+}
+
+#category {
+    padding: 10px;
+    margin: auto;
+    background-color: black;
+    color: white;
 }
 
 .parentDivTwo {
     display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    flex-flow: row wrap;
+}
+
+#ingredients-container {
+    width: calc(40% - 20px);
+    margin-left: 20px;
+}
+
+#instructions-container {
+    width: 60%;
+}
+
+img {
+    width: 100%;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 48px;
+}
+
+.reviewsContainer {
+    width: 30%;
+    margin: auto;
+    display: flex;
     flex-direction: column;
-    margin: 20px
+    justify-content: center;
+}
+
+#full-page {
+    width: 100%;
+}
+
+#ratings-and-reviews {
+    margin: auto;
+    font-size: 36px;
+    text-align: center;
+}
+
+.checked {
+  color: orange;
+}
+
+#userId {
+    display: none;
 }
