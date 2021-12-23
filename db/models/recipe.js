@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     Recipe.hasMany(models.Instruction, {foreignKey: 'recipeId'})
     Recipe.hasMany(models.Review, {foreignKey: 'recipeId'})
     Recipe.hasMany(models.Rating, {foreignKey: 'recipeId'})
+    Recipe.belongsTo(models.Category, {foreignKey: 'categoryId'})
   };
   return Recipe;
 };
