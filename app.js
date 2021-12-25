@@ -38,8 +38,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // set up session middleware
 const store = new SequelizeStore({ db: sequelize });
 
-console.log('---------APP JS 1----------');
-
 // create Session table if it doesn't already exist
 store.sync();
 app.use(restoreUser)
@@ -47,8 +45,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/boards', boardsRouter);
 app.use('/recipes', recipesRouter);
-
-console.log('---------APP JS 2----------');
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

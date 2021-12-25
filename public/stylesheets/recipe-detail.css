@@ -22,6 +22,20 @@
     text-align: center;
 }
 
+#board-selector {
+    font-size: 15px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+#add-to-board-button {
+    padding: 10px;
+    margin: auto;
+    background-color: black;
+    color: white;
+    font-size: 12px;
+}
+
 hr {
     height: 5px;
     width: 50%;
@@ -97,4 +111,93 @@ h1 {
 
 #userId {
     display: none;
+}
+
+#submitReviewForm {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    width: 400px;
+    margin: auto;
+}
+
+#submitReviewButton {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    background-color: black;
+    color: white;
+    font-size: 14px;
+}
+
+#review-input {
+    outline: none;
+    resize: none;
+    margin: auto;
+    width: 300px;
+    height: 100px;
+}
+
+/* #review-input:focus, .single-review:focus {
+    border: 2px solid red;
+} */
+
+[contenteditable] {
+    outline: 2px solid purple;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#review-separator {
+    width: auto;
+}
+
+#recipe-author {
+    font-size: 20px;
+}
+
+#no-ratings-yet, #log-in-to-create-board, #notloggedtext {
+    font-size: 16px;
+}
+
+#notloggedtext {
+    margin: auto;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.single-review-box {
+    border: .5px solid black;
+    padding: 5px;
+}
+
+.edit-and-delete-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.edit-and-delete-buttons form {
+    height: 100%;
+    margin: auto;
+}
+
+.editform button , .deleteform button {
+    font-size: 16px;
+    margin: auto;
+    padding: 5px;
+    background-color: black;
+    color: white;
+    border: none;
+    text-align: center;
+    width: 100px;
+}
+
+.editform button:hover , .deleteform button:hover {
+    cursor: pointer;
 }

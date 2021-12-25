@@ -49,7 +49,7 @@ if(validatorErrors.isEmpty()) {
   }
   errors.push('Login failed for the provided email address and password');
 } else {
-  errors = validationErrors.array().map((error) => error.msg)
+  errors = validatorErrors.array().map((error) => error.msg)
 }
 res.render('login', {
   title: 'Recipeats | Login',
