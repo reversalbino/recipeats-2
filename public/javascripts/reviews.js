@@ -10,7 +10,7 @@ window.addEventListener("load", (event) => {
     const urlParts = url.split('/');
     const recipeIdFromURL = urlParts[2];
 
-   
+
 
     if (submitButton) {
         submitButton.addEventListener('click', async (e) => {
@@ -62,14 +62,14 @@ window.addEventListener("load", (event) => {
 
                 let username = document.createElement('p');
                 username.setAttribute('class', 'username');
-                username.innerText = data.userId;
+                username.innerText = data.username;
                 newElement.appendChild(username);
 
                 let br = document.createElement('br');
                 newElement.appendChild(br);
 
                 let reviewBody = document.createElement('p');
-                reviewBody.setAttribute('class', `review-body-${data.reviewId}`);
+                reviewBody.setAttribute('id', `review-body-${data.reviewId}`);
                 reviewBody.innerText = reviewText;
                 newElement.appendChild(reviewBody);
 
@@ -107,8 +107,7 @@ window.addEventListener("load", (event) => {
                     e.stopPropagation();
 
                     const reviewId = e.target.value;
-                    const reviewText = document.querySelector(`.review-body-${reviewId}`)
-                    console.log('=========+++', reviewId, reviewText)
+                    const reviewText = document.querySelector(`#review-body-${reviewId}`)
 
                     reviewText.contentEditable == 'true' ? reviewText.contentEditable = 'false' : reviewText.contentEditable = 'true';
 
@@ -118,11 +117,6 @@ window.addEventListener("load", (event) => {
                         localStorage.setItem('reviewText', reviewText.innerText);
                     }
 
-                    // reviewText.addEventListener('keystroke', async(e) => {
-
-                    //     console.log('keystroke', reviewText.innerText)
-                    // })
-                    //reviewText.setAttribute('contenteditable', 'true');
                     const res = await fetch(`/recipes/reviews/${reviewId}/edit`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -175,6 +169,7 @@ window.addEventListener("load", (event) => {
                         reviewBody.setAttribute('name', 'reviewbody');
                         // reviewBody.setAttribute('value', )
                         reviewBody.setAttribute('maxlength', '255');
+                        reviewBody.setAttribute('id', 'review-input');
 
                         let button = document.createElement('button');
                         button.setAttribute('type', 'submit');
@@ -182,11 +177,16 @@ window.addEventListener("load", (event) => {
                         button.setAttribute('value', recipeIdFromURL);
                         button.innerText = 'Submit Review';
 
+                        let lineBreak = document.createElement('br');
+
                         newReviewForm.appendChild(input);
                         newReviewForm.appendChild(reviewBody);
+                        newReviewForm.appendChild(lineBreak);
                         newReviewForm.appendChild(button);
 
-                        document.getElementsByClassName('reviewsContainer')[0].prepend(newReviewForm);
+                        //document.getElementsByClassName('reviewsContainer')[0].prepend(newReviewForm);
+                        document.getElementById('temp-container').after(newReviewForm);
+
 
                         button.addEventListener('click', async (e) => {
                             console.log(button);
@@ -234,17 +234,15 @@ window.addEventListener("load", (event) => {
                                     // review.appendChild(tr)
                                     let newElement = document.createElement('div');
                                     newElement.setAttribute('class', `single-review-${data.reviewId}`);
+                                    newElement.setAttribute('reviewId', data.reviewId);
 
                                     let username = document.createElement('p');
                                     username.setAttribute('class', 'username');
-                                    username.innerText = data.userId;
+                                    username.innerText = data.username;
                                     newElement.appendChild(username);
 
-                                    let br = document.createElement('br');
-                                    newElement.appendChild(br);
-
                                     let reviewBody = document.createElement('p');
-                                    reviewBody.setAttribute('class', `review-body-${data.reviewId}`);
+                                    reviewBody.setAttribute('id', `review-body-${data.reviewId}`);
                                     reviewBody.innerText = reviewText;
                                     newElement.appendChild(reviewBody);
 
@@ -286,7 +284,7 @@ window.addEventListener("load", (event) => {
                 }
             })
 
-            
+
         })
     }
 
@@ -329,6 +327,7 @@ window.addEventListener("load", (event) => {
                 reviewBody.setAttribute('name', 'reviewbody');
                 // reviewBody.setAttribute('value', )
                 reviewBody.setAttribute('maxlength', '255');
+                reviewBody.setAttribute('id', 'review-input');
 
                 let button = document.createElement('button');
                 button.setAttribute('type', 'submit');
@@ -340,7 +339,8 @@ window.addEventListener("load", (event) => {
                 newReviewForm.appendChild(reviewBody);
                 newReviewForm.appendChild(button);
 
-                document.getElementsByClassName('reviewsContainer')[0].prepend(newReviewForm);
+                // document.getElementById('temp-container').appendChild(newReviewForm);
+                document.getElementById('temp-container').after(newReviewForm);
 
                 button.addEventListener('click', async (e) => {
                     console.log(button);
@@ -391,14 +391,14 @@ window.addEventListener("load", (event) => {
 
                             let username = document.createElement('p');
                             username.setAttribute('class', 'username');
-                            username.innerText = data.userId;
+                            username.innerText = data.username;
                             newElement.appendChild(username);
 
                             let br = document.createElement('br');
                             newElement.appendChild(br);
 
                             let reviewBody = document.createElement('p');
-                            reviewBody.setAttribute('class', `review-body-${data.reviewId}`);
+                            reviewBody.setAttribute('id', `review-body-${data.reviewId}`);
                             reviewBody.innerText = reviewText;
                             newElement.appendChild(reviewBody);
 
@@ -430,6 +430,7 @@ window.addEventListener("load", (event) => {
                             // newElement.appendChild(deleteForm);
 
                             document.getElementById('individual-reviews').appendChild(newElement);
+                            //document.getElementById('temp-container').after(newReviewForm);
                         }
                     })
 
@@ -446,8 +447,10 @@ window.addEventListener("load", (event) => {
             e.stopPropagation();
 
             const reviewId = e.target.value;
-            const reviewText = document.querySelector(`.review-body-${reviewId}`)
+            const reviewText = document.querySelector(`#review-body-${reviewId}`)
             console.log('=========+++', reviewId, reviewText)
+
+            console.log(reviewId);
 
             reviewText.contentEditable == 'true' ? reviewText.contentEditable = 'false' : reviewText.contentEditable = 'true';
 

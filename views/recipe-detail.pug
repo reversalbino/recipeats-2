@@ -2,7 +2,7 @@ extends layout.pug
 
 block content
 
-    
+
 
     div.parentDivOne
         div.imageDiv
@@ -17,21 +17,21 @@ block content
                         <span class="fa fa-star checked"></span>
                     if avgratings === -.5
                         <span class="fa fa-star-half-o checked"></span>
-                else    
-                    p.no-ratings-yet Leave the first rating!
+                else
+                    p#no-ratings-yet Leave the first rating!
             if locals.authenticated
                 if errors
                     each error in errors
                         li= error
                 a(href="/boards/new") Create a new board!
                 form(action=`/recipes/${recipe.id}/boards` method="post")
-                    select(name="addToBoard")
+                    select#board-selector(name="addToBoard")
                         each board in recipeBoards
                             option(value= board.id)= board.name
-                    button(type="submit") Add to Board
+                    button#add-to-board-button(type="submit") Add to Board
                 p#userId= locals.userId
             if !locals.authenticated
-                a(href=`/users/login`) Log in to create a board!
+                a#log-in-to-create-board(href=`/users/login`) Log in to create a board!
     div.parentDivTwo
         div#ingredients-container
             h1#ingredients-header Ingredients
@@ -50,41 +50,38 @@ block content
     h1#ratings-and-reviews Ratings and Reviews
     br
     div.reviewsContainer
-    
         if locals.authenticated
             if userId
                 #temp-container
-                //- div.addrating
-                //-     //- input#star1.star(type='radio' name='rating' value='1' userId=locals.userId checked= userRating===1)
-                //-     if userRating >= 1 && userRating < 2
-                //-     span(class="fa fa-star" checked= `${oneStar}` name='rating' value='1' userId=locals.userId)
-                //-     input#star2.star(type='radio' name='rating' value='2' userId=locals.userId checked= userRating===2)
-                //-     input#star3.star(type='radio' name='rating' value='3' userId=locals.userId checked= userRating===3)
-                //-     input#star4.star(type='radio' name='rating' value='4' userId=locals.userId checked= userRating===4)
-                //-     input#star5.star(type='radio' name='rating' value='5' userId=locals.userId checked= userRating===5)
             if !userHasReview
-                form(action= `/recipes/${recipe.id}/review/add`, method="post" id="submitReviewForm")
+                form#submitReviewForm(action=`/recipes/${recipe.id}/review/add`, method="post")
                     input(type="hidden" value=csrfToken name="_csrf")
-                    textarea(name="reviewbody" value= reviews.reviewText maxlength='255' )
+                    textarea#review-input(name="reviewbody" value= reviews.reviewText maxlength='255' )
                     br
                     button(type="submit" id="submitReviewButton" value=`${recipe.id}`) Submit Review
         div#individual-reviews
             if reviews
-                each review in reviews 
-                    div(class=`single-review-${review.id} red`)
-                        p.username= review.userId
-                        br
-                        p(class=`review-body-${review.id}`)= review.reviewText
-                        br
+                each review in reviews
+                    div(class=`single-review-${review.id} red single-review-box` reviewId= review.id)
+                        p.username= review.User.username
+                        if ratingsObj[review.userId] !== undefined
+                            while ratingsObj[review.userId]-- && ratingsObj[review.userId] > -.1
+                                <span class="fa fa-star checked"></span>
+                            if ratingsObj[review.userId] === -.5
+                                <span class="fa fa-star-half-o checked"></span>
+                        p.review-date= datesObj[review.id]
+                        p(id=`review-body-${review.id}` class='single-review')= review.reviewText
+                        hr#review-separator
 
-                        if locals.userId === review.userId 
-                            form.editform(action=`/recipes/reviews/${review.id}/edit`, method="post")
-                                button(value=`${review.id}` class="editbtn")#editButton Edit
-                            form.deleteform(action=`/recipes/reviews/${review.id}/delete`, method="post")
-                                button(value=`${review.id}` class="deletebtn")#deleteButton Delete
+                        if locals.userId === review.userId
+                            .edit-and-delete-buttons
+                                form.editform(action=`/recipes/reviews/${review.id}/edit`, method="post")
+                                    button(value=`${review.id}` class="editbtn")#editButton Edit
+                                form.deleteform(action=`/recipes/reviews/${review.id}/delete`, method="post")
+                                    button(value=`${review.id}` class="deletebtn")#deleteButton Delete
         br#ratings-separator
-        
+
 
         unless locals.authenticated
-            p.notloggedtext Please Log In or Register to add a rating and write a review!
+            p#notloggedtext Please Log In or Register to add a rating and write a review!
     script(src='/javascripts/ratings.js')
