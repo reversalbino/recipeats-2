@@ -6,7 +6,6 @@ try {
     tempUserId = document.getElementById('userId').innerHTML;
 }
 catch(e) {}
-console.log(tempUserId);
 
 if(tempUserId != null) {
   document.getElementById('temp-container').innerHTML = `
@@ -126,20 +125,14 @@ if(tempUserId != null) {
   for (let i = 0; i < stars.length; i++) {
       let star = stars[i];
       star.addEventListener('click', async(e) => {
-          console.log(e.target.value)
           localStorage.setItem('userRating', e.target.value)
-          console.log(e.target)
-          // let userId = document.getElementById(`star${i+1}`).getAttribute('userId');
-          // console.log(userId)
           const res = await fetch(`/recipes/${recipeId}/${e.target.value}`, {
               method: 'POST',
           });
           const data = await res.json()
-          console.log(data)
           if(data.message === 'success'){
               const avgrating = data.avgrating
               const ratingContainer = document.getElementById('rating-container')
-              // console.log(avgrating, ratingContainer)
               ratingContainer.innerHTML = '';
               let nearestHalf = (Math.round(avgrating * 2) / 2);
               for (let i = 0; i < Math.floor(nearestHalf); i++) {
