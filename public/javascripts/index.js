@@ -1,5 +1,4 @@
 window.addEventListener("load", (event)=>{
-    console.log("hello from javascript!")
     //test
 
      
@@ -10,13 +9,13 @@ window.addEventListener("load", (event)=>{
           method: "DELETE"
       });
       let data = await res.json();
-      console.log({
-          statusCode: res.status,
-          headers: {
-              "Content-Type": res.headers.get("Content-Type")
-          },
-          body: data
-      });
+    //   console.log({
+    //       statusCode: res.status,
+    //       headers: {
+    //           "Content-Type": res.headers.get("Content-Type")
+    //       },
+    //       body: data
+    //   });
   }
 
 
